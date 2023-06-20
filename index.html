@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buithisun</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+    <link href='back.css' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Rubik+Mono+One" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id='stars'></div>
+    <div id='stars2'></div>
+    <div id='stars3'></div>
+    <div class="wrapper">
+        <div class="marker red d-none"></div>
+        <div class="marker green d-none"></div>
+        <div class="marker blue d-none"></div>
+        <div class="dog">
+            <div class="body-wrapper">
+                <div class="body img-bg"></div>
+            </div>
+            <div class="head-wrapper">
+                <div class="head img-bg"></div>
+            </div>
+            <div class="leg-wrapper">
+                <div class="leg one img-bg"></div>
+            </div>
+            <div class="leg-wrapper">
+                <div class="leg two img-bg"></div>
+            </div>
+            <div class="leg-wrapper">
+                <div class="leg three img-bg"></div>
+            </div>
+            <div class="leg-wrapper">
+                <div class="leg four img-bg"></div>
+            </div>
+            <div class="tail-wrapper">
+                <div class="tail img-bg"></div>
+            </div>
+        </div>
+    </div>
+    <div class="indicator"></div>
+
+    <p id="offscreen-text" class="offscreen-text"></p>
+    <p id="text" class="text"></p>
+    <svg id="svg"></svg>
+    <input type="text" class="input" , id="input" />
+    <p class="animate">Nhắn đôi lời + up ảnh -> nhấn Send để tớ biết là c ăn rồi nhá...</p>
+    <!-- upload an image to send -->
+    <input type="file" id="filename" accept="image/*" />
+    <input class="btn btn-outline-dark" type="button" id="my-button" value="Send" />
+    <script>
+        // play music
+        //  const audio = new Audio('tinhcatinhta.mp3');
+        //audio.play();
+        window.addEventListener('click', () => {
+            const audio = new Audio('tinhcatinhta.mp3');
+            audio.play();
+        }, { once: true });
+        const API_TOKEN = 'xxxxx';
+        const CHAT_ID = 'xxxx';
+        const fileInput = document.getElementById('filename');
+        const messageInput = document.getElementById('input');
+        // Listen for the form submit event
+        var myButton = document.getElementById('my-button');
+        if (myButton) {
+            myButton.addEventListener('click', (event) => {
+                event.preventDefault();
+                // Get the selected file and message
+                const file = fileInput.files[0];
+                const message = messageInput.value;
+                // Create a new FormData object
+                const formData = new FormData();
+                formData.append('chat_id', CHAT_ID);
+                formData.append('photo', file);
+                formData.append('caption', message);
+                // Send the request to the Telegram API
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', `https://api.telegram.org/bot${API_TOKEN}/sendPhoto`);
+                xhr.send(formData);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        alert("Ngoan lắm, tớ sẽ check thông tin và cung cấp phiếu bé ngoan sau khi xác nhận nhá")
+                        const response = JSON.parse(xhr.responseText);
+                    } else if (xhr.readyState === 4 && xhr.status !== 200) {
+                        alert("Nào nào, chụp ảnh gửi qua đây 😠")
+                    }
+                };
+            });
+        }
+    </script>
+    <script src="dog.js"></script>
+    <script src="main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/plugins/CSSPlugin.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/easing/EasePack.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/TweenLite.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script>
+        document.onkeydown = function (e) {
+            if (e.ctrlKey &&
+                (e.keyCode === 67 ||
+                    e.keyCode === 86 ||
+                    e.keyCode === 85 ||
+                    e.keyCode === 117)) {
+                return false;
+            } else {
+                return true;
+            }
+        };
+        $(document).keypress("u", function (e) {
+            if (e.ctrlKey) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        });
+    </script>
+</body>
+
+</html>
